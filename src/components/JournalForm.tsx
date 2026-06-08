@@ -19,6 +19,15 @@ function formatToday() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function formatDateLabel(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diff = Math.round((now.getTime() - date.getTime()) / 86400000);
+  if (diff === 0) return 'Today';
+  if (diff === 1) return 'Yesterday';
+  return `${diff} days ago`;
+}
+
 function JournalForm({ entries, onSave }: JournalFormProps) {
   const [searchParams] = useSearchParams();
   const queryDate = searchParams.get('date');
@@ -84,6 +93,31 @@ function JournalForm({ entries, onSave }: JournalFormProps) {
         <p className="text-sm text-slate-600">Each calendar day can have one entry. Choose today or select a past date to update it.</p>
       </div>
       <form className="space-y-5" onSubmit={handleSubmit}>
+        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">One-week quick select</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {Array.from({ length: 7 }).map((_, index) => {
+              const dateValue = new Date();
+              dateValue.setDate(dateValue.getDate() - index);
+              const formatted = dateValue.toISOString().slice(0, 10);
+              return (
+                <button
+                  type="button"
+                  key={formatted}
+                  onClick={() => setDate(formatted)}
+                  className={`rounded-3xl border px-4 py-2 text-left text-sm font-medium transition ${
+                    date === formatted
+                      ? 'border-brand-500 bg-brand-500 text-white'
+                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-100'
+                  }`}
+                >
+                  <div>{formatDateLabel(formatted)}</div>
+                  <div className="text-xs text-slate-500">{formatted}</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
         <div className="grid gap-5 sm:grid-cols-2">
           <label className="space-y-2 text-sm font-medium text-slate-700">
             Date

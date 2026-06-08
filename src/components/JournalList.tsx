@@ -30,7 +30,13 @@ function JournalList({ entries, onDelete, onEdit }: JournalListProps) {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="space-y-4">
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">{entry.date}</span>
+                    <button
+                      type="button"
+                      onClick={() => onEdit(entry.date)}
+                      className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-slate-600 transition hover:bg-slate-200"
+                    >
+                      {entry.date}
+                    </button>
                     <span className="rounded-full bg-brand-50 px-3 py-1 text-sm font-semibold text-brand-700">{entry.mood}</span>
                   </div>
                   <p className="max-w-2xl text-slate-700">{entry.text.length > 180 ? `${entry.text.slice(0, 180)}...` : entry.text}</p>
